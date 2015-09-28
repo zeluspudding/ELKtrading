@@ -7,15 +7,12 @@ if __name__ == '__main__':
     try:
         i = 1 #Prepare to iterate over samples
         while True:
-            payload1 = json.dumps(getQuotes('AAPL'), indent=2)
-            payload2 = json.loads(getQuotes('AAPL'), indent=2)
+            payload = getQuotes('AAPL')[0]
             #data = {'message': 'temperature %.1f cm' % temperature, 'temperature': temperature, 'hostname': socket.gethostname()}
-            print ("Received temperature = %.1f C" % temperature)
-            es.index(index='stocks1', doc_type='stimuli', id=i, body=payload1)
-            es.index(index='stocks2', doc_type='stimuli', id=i, body=payload2)
+            print "Last Trade Price:", float(payload['LastTradePrice'])
+            es.index(index='stocks1', doc_type='stimuli', id=i, body=json.dumps(payload))
             i=i+1
             time.sleep(5)
-    
-    # interrupt
+# interrupt
     except KeyboardInterrupt:
         print("Programm interrupted")
