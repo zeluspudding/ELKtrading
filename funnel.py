@@ -7,10 +7,18 @@ if __name__ == '__main__':
     try:
         i = 1 #Prepare to iterate over samples
         while True:
-            payload = getQuotes('AAPL')[0]
-            #data = {'message': 'temperature %.1f cm' % temperature, 'temperature': temperature, 'hostname': socket.gethostname()}
-            print "Last Trade Price:", float(payload['LastTradePrice'])
-            es.index(index='stocks1', doc_type='stimuli', id=i, body=json.dumps(payload))
+            data = getQuotes('TSLA')[0]
+            payload={
+                "Index": "NASDAQ",
+                "LastTradeWithCurrency": float(data['LastTradeWithCurrency']),
+                "LastTradeDateTime": "2015-09-29T15:25:58Z",
+                "LastTradePrice": float(data['LastTradePrice']),
+                "StockSymbol": "AAPL",
+                "ID": float(data['ID'])
+                }
+            print "Last Trade Price:", float(data['LastTradePrice'])
+            es.index(index='stocks1', doc_type='stimuli', id=i, body=payload)
+            #es.index(index='stocks1', doc_type='stimuli', id=i, body=json.dumps(payload))
             i=i+1
             time.sleep(5)
 # interrupt
